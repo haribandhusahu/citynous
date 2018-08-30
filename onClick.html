@@ -1,0 +1,96 @@
+<html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Disabling the default UI</title>
+    <style>
+        html,
+        body,
+        #mymap {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+
+    <script>
+        var map;
+
+        function initialize() {
+
+            var miami = new google.maps.LatLng(41.85, -87.65);
+
+            var mapOptions = {
+                zoom: 4,
+                center: miami,
+                disableDefaultUI: true,
+            }
+            map = new google.maps.Map(document.getElementById('mymap'),
+                mapOptions);
+
+            var myloc = document.getElementById("try");
+
+            function getlocation() {
+                //code
+
+                // Try HTML5 geolocation
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var pos = new google.maps.LatLng(position.coords.latitude,
+                            position.coords.longitude);
+
+                        var infowindow = new google.maps.InfoWindow({
+                            map: map,
+                            position: pos,
+                            content: 'Location found using HTML5.'
+                        });
+
+                    }, function () {
+                        handleNoGeolocation(true);
+                    });
+                } else {
+                    // Browser doesn't support Geolocation
+                    handleNoGeolocation(false);
+                }
+            }
+
+
+            function handleNoGeolocation(errorFlag) {
+                if (errorFlag) {
+                    var content = 'Error: The Geolocation service failed.';
+                } else {
+                    var content = 'Error: Your browser doesn\'t support geolocation.';
+                }
+
+                var options = {
+                    map: map,
+                    position: new google.maps.LatLng(60, 105),
+                    content: content
+                };
+
+                var infowindow = new google.maps.InfoWindow(options);
+
+
+            }
+        }
+
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+</head>
+
+<body>
+    <div id="try">
+        <button onclick="getlocation()">Click here</button>
+    </div>
+    <div id="mymap"></div>
+
+</body>
+
+</html>
+<html>
